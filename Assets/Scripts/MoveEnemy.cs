@@ -7,6 +7,7 @@ public class MoveEnemy : MonoBehaviour
     [SerializeField] private float _moveSpeed = 2f;
     [SerializeField] private SpriteRenderer _spriteRenderer;
     [SerializeField] private BoxCollider2D[] _boxGround;
+    [SerializeField] private int _contactDamage = 2;
 
     private float _direction = 1f;
 
@@ -22,9 +23,9 @@ public class MoveEnemy : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.GetComponentInParent<MovePlayer>() != null)
+        if(collision.TryGetComponent(out HealthPlayer healthPlayer))
         {
-            GameEvents.RaiseEnemyTouchedByPlayer(this);
+            healthPlayer.TakeDamage(_contactDamage);
         }
 
         foreach (var box in _boxGround)

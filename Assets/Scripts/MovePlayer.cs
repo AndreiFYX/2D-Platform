@@ -1,4 +1,4 @@
-using System;
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -12,21 +12,26 @@ public class MovePlayer : MonoBehaviour
     [SerializeField] private Transform _groundCheck;
     [SerializeField] private LayerMask _groundLayer;
     [SerializeField] private float _groundCheckRadius = 0.1f;
+    [SerializeField] private PlayerAttackHitbox _attackHitbox;
+    [SerializeField] private float _attackDuration = 1.25f;
 
     private Rigidbody2D _rigidbody2D;
-    private bool _isGrounded;
-
     private int _idleSpeed = 0;
+
+    private bool _isGrounded;
+    private bool _isAttacking;
 
     private void Awake()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
+        _animator = GetComponent<Animator>();
     }
 
     private void Update()
     {
         Move();
         Jump();
+        Attack();
     }
 
     private void FixedUpdate()
@@ -64,5 +69,26 @@ public class MovePlayer : MonoBehaviour
             _rigidbody2D.AddForce(Vector2.up * _jumpForce, ForceMode2D.Impulse);
             _animator.SetTrigger("Jump2");
         }
+    }
+
+    private void Attack()
+    {
+        if (Input.GetKeyDown(KeyCode.F) && _isGrounded && !_isAttacking)
+        {
+            StartCoroutine(AttackRoutine());
+        }
+    }
+
+    private IEnumerator AttackRoutine()
+    {
+        _isAttacking = true;
+
+        _animator.SetTrigger("Attack1");
+        _attackHitbox.BeginAttack();
+
+        yield return new WaitForSeconds(_attackDuration);
+
+        _attackHitbox.EndAttack();
+        _isAttacking = false;
     }
 }
