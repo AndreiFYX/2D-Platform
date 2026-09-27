@@ -37,6 +37,8 @@ public class PlayerMover : MonoBehaviour
             _groundCheck.position,
             _groundCheckRadius,
             _groundLayer);
+
+        _animator.SetBool("isGround", _isGrounded);
     }
 
     private void Move()
@@ -57,5 +59,6 @@ public class PlayerMover : MonoBehaviour
 
         _rigidbody.AddForce(Vector2.up * _jumpForce, ForceMode2D.Impulse);
         _animator.SetTrigger("Jump2");
+        _animator.SetBool("Walk", false);
     }
 }
