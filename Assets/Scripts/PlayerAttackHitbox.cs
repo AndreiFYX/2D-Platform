@@ -31,9 +31,9 @@ public class PlayerAttackHitbox : MonoBehaviour
         if (!_canDamage)
             return;
 
-        if (collider.TryGetComponent(out DeathEnemy enemyHealth))
+        if (collider.TryGetComponent(out Health health))
         {
-            enemyHealth.TakeDamage(_damaged);
+            health.TakeDamage(_damaged);
             _canDamage = false;            
         }
     }

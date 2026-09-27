@@ -2,14 +2,7 @@ using UnityEngine;
 
 public class Coin : MonoBehaviour
 {
-    [SerializeField] private CoinCounter _coinCounter;
+    [SerializeField, Min(1)] private int _value = 1;
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.TryGetComponent(out MovePlayer player))
-        {
-            _coinCounter.AddCoins();
-            Destroy(gameObject);
-        }
-    }
+    public int Value => _value;
 }

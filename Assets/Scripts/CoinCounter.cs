@@ -1,15 +1,18 @@
-using TMPro;
+using System;
 using UnityEngine;
 
 public class CoinCounter : MonoBehaviour
 {
-    [SerializeField] private TMP_Text _coinScore;
+    public event Action<int> Changed;
 
-    private int _score;
+    public int Value { get; private set; }
 
-    public void AddCoins()
+    public void Add(int amount)
     {
-        _score++;
-        _coinScore.text = _score.ToString();        
+        if (amount <= 0)
+            return;
+
+        Value += amount;
+        Changed?.Invoke(Value);
     }
 }
