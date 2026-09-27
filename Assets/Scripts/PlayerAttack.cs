@@ -1,6 +1,9 @@
 using System.Collections;
 using UnityEngine;
 
+[RequireComponent(typeof(InputReader))]
+[RequireComponent(typeof(PlayerMover))]
+[RequireComponent(typeof(Animator))]
 public class PlayerAttack : MonoBehaviour
 {
     [SerializeField] private InputReader _input;
@@ -13,9 +16,14 @@ public class PlayerAttack : MonoBehaviour
 
     private void Awake()
     {
-        _input ??= GetComponent<InputReader>();
-        _mover ??= GetComponent<PlayerMover>();
-        _animator ??= GetComponent<Animator>();
+        if (_input == null) 
+            _input = GetComponent<InputReader>();
+        
+        if (_mover == null)
+            _mover = GetComponent<PlayerMover>();
+        
+        if (_animator == null)
+            _animator = GetComponent<Animator>();
     }
 
     private void Update()
