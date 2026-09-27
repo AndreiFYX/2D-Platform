@@ -12,8 +12,8 @@ public class PlayerMover : MonoBehaviour
     [SerializeField] private Transform _groundCheck;
     [SerializeField] private LayerMask _groundLayer;
 
-    private Rigidbody2D _rigidbody;
-    private bool _isGrounded;
+    private Rigidbody2D _rigidbody; 
+    [SerializeField] private bool _isGrounded; // временно видна
 
     public bool IsGrounded => _isGrounded;
 
