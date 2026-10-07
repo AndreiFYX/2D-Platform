@@ -1,64 +1,70 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(InputReader), typeof(EntityRotator))]
+[RequireComponent (typeof(GroundChecker), typeof(PlayerAnimator))]
 public class PlayerMover : MonoBehaviour
 {
     [SerializeField, Min(0f)] private float _moveSpeed = 5f;
     [SerializeField, Min(0f)] private float _jumpForce = 5f;
-    [SerializeField, Min(0f)] private float _groundCheckRadius = 0.1f;
     [SerializeField] private InputReader _input;
     [SerializeField] private EntityRotator _rotator;
-    [SerializeField] private Animator _animator;
-    [SerializeField] private Transform _groundCheck;
-    [SerializeField] private LayerMask _groundLayer;
+    [SerializeField] private GroundChecker _groundChecker;
+    [SerializeField] private PlayerAnimator _playerAnimator;
+        
+    private Rigidbody2D _rigidbody;
+    private float _direction;
 
-    private Rigidbody2D _rigidbody; 
-    [SerializeField] private bool _isGrounded; // временно видна
-
-    public bool IsGrounded => _isGrounded;
+    public bool isGround => _groundChecker.IsGrounded;
 
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
         _input = GetComponent<InputReader>();
         _rotator = GetComponent<EntityRotator>();
-        _animator = GetComponent<Animator>();
+        _groundChecker = GetComponent<GroundChecker>();
+        _playerAnimator = GetComponent<PlayerAnimator>();
     }
 
-    private void Update()
+    private void OnEnable()
     {
-        Move();
-        Jump();
+        _input.MovementChanged += OnMovementChanged;
+        _input.JumpPressed += OnJumpPressed;
+    }
+
+    private void OnDisable()
+    {
+        _input.MovementChanged -= OnMovementChanged;
+        _input.JumpPressed -= OnJumpPressed;
     }
 
     private void FixedUpdate()
     {
-        _isGrounded = Physics2D.OverlapCircle(
-            _groundCheck.position,
-            _groundCheckRadius,
-            _groundLayer);
+        Move();
 
-        _animator.SetBool("isGround", _isGrounded);
+        _playerAnimator.SetGrounded(isGround);
+        _playerAnimator.SetWalking(!Mathf.Approximately(_direction, 0f));
+    }
+
+    private void OnMovementChanged(float direction)
+    {
+        _direction = direction;
+
+        if (!Mathf.Approximately(direction, 0f))
+            _rotator.Face(_direction);
+    }
+
+    private void OnJumpPressed()
+    {
+        if (!isGround)
+            return;
+
+        _rigidbody.AddForce(Vector2.up * _jumpForce, ForceMode2D.Impulse);
+        _playerAnimator.PlayJump();
+        _playerAnimator.SetWalking(false);
     }
 
     private void Move()
     {
-        float direction = _input.Horizontal;
-        _rigidbody.linearVelocity = new Vector2(direction * _moveSpeed, _rigidbody.linearVelocity.y);
-
-        if (!Mathf.Approximately(direction, 0f))
-            _rotator.Face(direction);
-
-        _animator.SetBool("Walk", !Mathf.Approximately(direction, 0f));
-    }
-
-    private void Jump()
-    {
-        if (!_input.JumpPressed || !_isGrounded)
-            return;
-
-        _rigidbody.AddForce(Vector2.up * _jumpForce, ForceMode2D.Impulse);
-        _animator.SetTrigger("Jump2");
-        _animator.SetBool("Walk", false);
+        _rigidbody.linearVelocity = new Vector2(_direction * _moveSpeed, _rigidbody.linearVelocity.y);
     }
 }

@@ -1,59 +1,58 @@
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(InputReader))]
-[RequireComponent(typeof(PlayerMover))]
-[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(PlayerAnimator))]
 public class PlayerAttack : MonoBehaviour
 {
     [SerializeField] private InputReader _input;
-    [SerializeField] private PlayerMover _mover;
     [SerializeField] private PlayerAttackHitbox _hitbox;
-    [SerializeField] private Animator _animator;
-   
-    private bool _isAttackFinished;
+    [SerializeField] private PlayerAnimator _playerAnimator;
+
+    private bool _isAttackFinished = true;
     private bool _isAttacking;
 
     private void Awake()
     {
-        if (_input == null)
-            _input = GetComponent<InputReader>();
+        _input = GetComponent<InputReader>();
+        _playerAnimator = GetComponent<PlayerAnimator>();
 
-        if (_mover == null)
-            _mover = GetComponent<PlayerMover>();
-
-        if (_animator == null)
-            _animator = GetComponent<Animator>();
-
-        if( _hitbox == null)
+        if (_hitbox == null)
             _hitbox = GetComponent<PlayerAttackHitbox>();
     }
 
-    private void Update()
+    private void OnEnable()
     {
-        if (_input.JumpPressed && !_isAttacking)
-            StopAllCoroutines();
-       
-        _isAttacking = false;
-        _isAttackFinished = false;
-        _hitbox.EndAttack();
+        _input.AttackPressed += OnAttackPressed;
+    }
 
-        if(_input.AttackPressed && !_isAttacking) 
-            StartCoroutine(AttackRoutine());
-    }  
+    private void OnDisable()
+    {
+        _input.AttackPressed -= OnAttackPressed;
+        _hitbox.EndAttack();
+        _isAttackFinished = true;
+        _isAttacking = false;
+    }
+
+    private void OnAttackPressed()
+    {
+        if (_isAttacking)
+            return;
+
+        StartCoroutine(AttackRoutine());
+    }
 
     private IEnumerator AttackRoutine()
     {
         _isAttacking = true;
         _isAttackFinished = false;
-        _animator.SetTrigger("Attack1");
+        _playerAnimator.PlayAttack();
 
         yield return new WaitUntil(() => _isAttackFinished);
-        
+
         _isAttacking = false;
-    }
-    
+    } 
+
     public void OnAttackBegin()
     {
         _hitbox.BeginAttack();
@@ -62,5 +61,6 @@ public class PlayerAttack : MonoBehaviour
     public void OnAttackEnd()
     {
         _hitbox.EndAttack();
+        _isAttackFinished = true;
     }
 }

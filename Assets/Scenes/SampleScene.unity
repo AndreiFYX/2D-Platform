@@ -558,6 +558,18 @@ MonoBehaviour:
   - {fileID: 1471594966}
   - {fileID: 283405186}
   _rotator: {fileID: 6132690262604397452}
+--- !u!114 &475753912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 475753897}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e21c0017755d3084cae6bb5aad57e3ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyAnimator
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -959,7 +971,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.019378558, y: 0.05626881}
+  m_Offset: {x: 0.32528198, y: -0.013074651}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -969,7 +981,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.9612429, y: 0.53705966}
+  m_Size: {x: 0.34943604, y: 0.3903875}
   m_EdgeRadius: 0
 --- !u!114 &757904800
 MonoBehaviour:
@@ -3610,13 +3622,15 @@ GameObject:
   - component: {fileID: 1408666142}
   - component: {fileID: 1408666141}
   - component: {fileID: 1408666140}
-  - component: {fileID: 1408666139}
+  - component: {fileID: 1408666146}
+  - component: {fileID: 1408666147}
   - component: {fileID: 1408666133}
   - component: {fileID: 1408666138}
   - component: {fileID: 1408666137}
   - component: {fileID: 1408666136}
   - component: {fileID: 1408666135}
-  - component: {fileID: 1408666134}
+  - component: {fileID: 1408666144}
+  - component: {fileID: 1408666145}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -3799,22 +3813,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ec9d157a12681349ba9273ec05b5523, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CoinCounter
---- !u!114 &1408666134
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1408666127}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 626aa04b0ae41e747bb33e0a07bff022, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
-  _input: {fileID: 1408666143}
-  _mover: {fileID: 1408666142}
-  _hitbox: {fileID: 757904800}
-  _animator: {fileID: 1408666128}
 --- !u!114 &1408666135
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3865,19 +3863,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CoinCollector
   _counter: {fileID: 1408666133}
---- !u!114 &1408666139
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1408666127}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8160a75edcd758545b0308826b12dca3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerAttackHitbox
-  _damaged: 5
 --- !u!114 &1408666140
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3917,15 +3902,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMover
   _moveSpeed: 5
   _jumpForce: 5
-  _groundCheckRadius: 0.1
   _input: {fileID: 1408666143}
   _rotator: {fileID: 1408666140}
-  _animator: {fileID: 1408666128}
-  _groundCheck: {fileID: 873487854}
-  _groundLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  _isGrounded: 1
+  _groundChecker: {fileID: 1408666145}
+  _playerAnimator: {fileID: 1408666144}
 --- !u!114 &1408666143
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3938,6 +3918,63 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5287158e377f0949b985d4bb6883394, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InputReader
+--- !u!114 &1408666144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1408666127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6acb3df5e56adb4ebae189ce52705d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAnimator
+--- !u!114 &1408666145
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1408666127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eef95f0e60a3fe84ebd9c25b6537907e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GroundChecker
+  _checkPoint: {fileID: 1268080707}
+  _checkRadius: 0.1
+  _groundLayer:
+    serializedVersion: 2
+    m_Bits: 64
+--- !u!114 &1408666146
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1408666127}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 626aa04b0ae41e747bb33e0a07bff022, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
+  _input: {fileID: 1408666143}
+  _hitbox: {fileID: 757904800}
+  _playerAnimator: {fileID: 1408666144}
+--- !u!114 &1408666147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1408666127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8160a75edcd758545b0308826b12dca3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAttackHitbox
+  _damaged: 5
 --- !u!1 &1444259282
 GameObject:
   m_ObjectHideFlags: 0
@@ -4744,6 +4781,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2267806282319829053, guid: a697219d879ce5848938900cadc7f4a5, type: 3}
       insertIndex: -1
       addedObject: {fileID: 475753904}
+    - targetCorrespondingSourceObject: {fileID: 2267806282319829053, guid: a697219d879ce5848938900cadc7f4a5, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 475753912}
   m_SourcePrefab: {fileID: 100100000, guid: a697219d879ce5848938900cadc7f4a5, type: 3}
 --- !u!1001 &2041485306
 PrefabInstance:
@@ -5111,7 +5151,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -5196,6 +5236,18 @@ MonoBehaviour:
   - {fileID: 1471594966}
   - {fileID: 283405186}
   _rotator: {fileID: 6132690262604397452}
+--- !u!114 &6132690262604397456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6132690262604397444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e21c0017755d3084cae6bb5aad57e3ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyAnimator
 --- !u!1 &7114561106864563492 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 9203829771515711578, guid: 4cc3ef0f816303b4993cca74e5f1df27, type: 3}
@@ -5311,6 +5363,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2267806282319829053, guid: a697219d879ce5848938900cadc7f4a5, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6132690262604397449}
+    - targetCorrespondingSourceObject: {fileID: 2267806282319829053, guid: a697219d879ce5848938900cadc7f4a5, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6132690262604397456}
   m_SourcePrefab: {fileID: 100100000, guid: a697219d879ce5848938900cadc7f4a5, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
